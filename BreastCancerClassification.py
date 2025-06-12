@@ -22,13 +22,7 @@
 
 # # <a id='toc1_1_'></a>[Setup](#roc0)
 
-# In[2]:
 
-
-get_ipython().run_line_magic('pip', 'install ucimlrepo==0.0.7')
-
-
-# In[3]:
 
 
 from ucimlrepo import fetch_ucirepo 
@@ -65,18 +59,18 @@ X = breast_cancer_wisconsin_diagnostic.data.features  # Extract the features as 
 y = breast_cancer_wisconsin_diagnostic.data.targets   # Extract the targets as a pandas DataFrame
 
 # print the first few rows of the data
-display(X.head())  # Display the first five rows of the features DataFrame
+print(X.head())  # Display the first five rows of the features DataFrame
 
 # print the first few rows of the target
-display(y.head())  # Display the first five rows of the targets DataFrame
+print(y.head())  # Display the first five rows of the targets DataFrame
 
 
 # In[5]:
 
 
-display(f'X shape: {X.shape}')  # Display the shape of the features DataFrame
-display(f'y shape: {y.shape}')  # Display the shape of the targets DataFrame
-display(y['Diagnosis'].value_counts())  # Display the count of each unique value in the 'Diagnosis' column of the targets DataFrame
+print(f'X shape: {X.shape}')  # Display the shape of the features DataFrame
+print(f'y shape: {y.shape}')  # Display the shape of the targets DataFrame
+print(y['Diagnosis'].value_counts())  # Display the count of each unique value in the 'Diagnosis' column of the targets DataFrame
 
 
 # The dataset is **imbalanced**, with more benign samples than malignant samples. So I will process the data and randomly select 200 samples from each malignant and benign.
@@ -98,7 +92,7 @@ data_M = data_M.sample(n=200, random_state=42)  # Randomly sample 200 malignant 
 # Combine the two classes
 balanced_data = pd.concat([data_B, data_M])  # Concatenate the sampled benign and malignant data
 
-display(balanced_data['Diagnosis'].value_counts())  # Display the count of each class in the balanced dataset
+print(balanced_data['Diagnosis'].value_counts())  # Display the count of each class in the balanced dataset
 
 
 # # <a id='toc1_3_'></a>[Data Preprocessing](#roc0)
@@ -113,8 +107,8 @@ y = balanced_data['Diagnosis']  # Extract the 'Diagnosis' column as the target
 # Convert the targets to binary labels
 y = y.map({'B': 0, 'M': 1})  # Map 'B' to 0 and 'M' to 1 for binary classification
 
-display(X)  # Display the features DataFrame
-display(y)  # Display the binary target Series
+print(X)  # Display the features DataFrame
+print(y)  # Display the binary target Seriest
 
 
 # Now I  standardize the feature values using the `StandardScaler` from scikit-learn.
@@ -131,6 +125,15 @@ display(y)  # Display the binary target Series
 
 # In[11]:
 
+# Split the data into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)  # Split the data into 80% train and 20% test, stratified by the target
+
+print(f'X_train shape: {X_train.shape}')  # Display the shape of the training features
+print(f'y_train shape: {y_train.shape}')  # Display the shape of the training targets
+print(f'X_test shape: {X_test.shape}')    # Display the shape of the test features
+print(f'y_test shape: {y_test.shape}')    # Display the shape of the test targets
 
 #  Standardize the data
 # Initialize the StandardScaler
@@ -156,21 +159,6 @@ train_loader = DataLoader(train_dataset, batch_size=2, shuffle=True)   # DataLoa
 test_loader = DataLoader(test_dataset, batch_size=2, shuffle=False)    # DataLoader for test data
 
 
-# In[12]:
-
-
-# Split the data into training and test sets
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42, stratify=y
-)  # Split the data into 80% train and 20% test, stratified by the target
-
-display(f'X_train shape: {X_train.shape}')  # Display the shape of the training features
-display(f'y_train shape: {y_train.shape}')  # Display the shape of the training targets
-display(f'X_test shape: {X_test.shape}')    # Display the shape of the test features
-display(f'y_test shape: {y_test.shape}')    # Display the shape of the test targets
-
-
-# # <a id='toc1_4_'></a>[Build and Train the Neural Network Model](#toc0_)
 
 # ##### Below I will start defining the network architecuter and training the model.<br/>
 # ##### #`nn.Module` from PyTorch will be used and the output layer will contain 2 neurons (corresponding with the two classes I have)<br/>
@@ -253,35 +241,3 @@ plt.legend()  # Show legend
 plt.grid(True)  # Show grid
 plt.show()  # Display the plot
 
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# 
